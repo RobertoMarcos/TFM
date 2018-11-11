@@ -1,5 +1,3 @@
-
-
 ##BLOQUE DE CARGA DE LIBRERÍAS
 
 if(!require("readr")){
@@ -18,23 +16,6 @@ if(!require("tidytext")){
   install.packages("tidytext")
   library("tidytext")
 }
-if (!require("e1071")){
-  install.packages("e1071")
-  library("e1071")
-}
-if (!require("ROCR")){
-  install.packages("ROCR")
-  library("ROCR")
-}
-if (!require("glmnet")){
-  install.packages("glmnet") 
-  library("glmnet")
-}
-if (!require("caTools")){
-  install.packages("caTools") 
-  library(caTools)
-}
-
 if (!require("tidyverse")){
   install.packages("tidyverse") 
   library(tidyverse)
@@ -47,7 +28,7 @@ if (!require("reshape2")){
 #path de archivos
 
 read_imdb <- function(data_path) {
-  path <- "~/Desktop/MASTER DATA SCIENCE/TFM//"
+  path <- "~/Desktop/MASTER DATA SCIENCE/TFM//" #Escoge el path en el que están los archivos
   read_tsv(paste0(path, data_path), na = "\\N", quote='', progress=F)
 }
 
@@ -56,7 +37,7 @@ read_imdb <- function(data_path) {
 
 df_ratings <- read_imdb("title.ratings.tsv")
 df_basics <- read_imdb('title.basics.tsv') %>%  select (tconst, titleType, originalTitle, startYear, endYear, runtimeMinutes, genres) %>% 
-  filter (titleType %in% c("tvSeries") & startYear >= 2000)
+  filter (titleType %in% c("tvSeries") & startYear >= 1990)
 
 df_basics <- df_basics %>% left_join(df_ratings)
 
@@ -131,6 +112,18 @@ names(Series)[12] <- "actress"
 names(Series)[13] <- "director"
 names(Series)[14] <- "writer"
 
+
+# Transformar en NA todas las celdas en blanco
+is.na(Series) <- Series==''
+
+
+# Nuevas columnas contando el número de actores y actrices por serie
+library(stringr)
+Series$GenderMale <- str_count(Series$actors, ',')+1
+Series$GenderFeMale <- str_count(Series$actress, ',')+1
+
+#Separamos a los actores por columnas 
+
 Series <- Series %>%  separate(actors, into= c("actors1", "actors2", "actors3"), sep = ",")
 Series <- Series %>%  separate(actress, into= c("actress1", "actress2", "actress3"), sep = ",")
 Series <- Series %>%  separate(director, into= c("director1"), sep = ",")
@@ -145,6 +138,8 @@ Series$numberOfEpisodes[is.na(Series$numberOfEpisodes)] <- 0
 Series$runtimeMinutes[is.na(Series$runtimeMinutes)] <- 0
 Series$averageRating[is.na(Series$averageRating)] <- 0
 Series$genre[is.na(Series$genre)] <- 0
+Series$GenderMale[is.na(Series$GenderMale)] <- 0
+Series$GenderFeMale[is.na(Series$GenderFeMale)] <- 0
 
 # Añadimos la columna 'Finalization' para separar a la hora del modelo y entrenar solo con los finalizados
 
@@ -152,5 +147,34 @@ Series$Finalization <- ifelse(Series$endYear != 0, 1, 0)
 
 #Guardamos en disco la bbdd en bruto
 
-write.csv(Series, file= "Series_.csv")
+write.csv(Series, file= "Series_2.csv")
+
+
+#Quitamos todas los géneros que no nos interesan al no tratarse de una serie
+
+table(Series$genre)
+
+Series<-Series[Series$genre!="music",]
+Series<-Series[Series$genre!="0",]
+Series<-Series[Series$genre!="short",]
+Series<-Series[Series$genre!="game-show",]
+Series<-Series[Series$genre!="reality-tv",]
+Series<-Series[Series$genre!="sport",]
+
+
+#Para poder llegar a alguna conclusión vamos a filtar por los siguientes variables en un primer modelo sin crew
+
+SeriesAll <- Series %>% filter (numberOfEpisodes  > 6 & averageRating > 0.1  & runtimeMinutes >10 ) %>% select (numberOfEpisodes, Finalization, originalTitle, startYear, endYear, runtimeMinutes, averageRating, 
+                                                                                                                numVotes, genre)
+SeriesAll <- SeriesAll %>% filter (numberOfEpisodes  < 100 & runtimeMinutes < 80 )
+
+write.csv(SeriesAll, file= "SeriesModelo1.csv")
+
+#Realizamos el mismo filtro pero añadiendo ahora si el crew mediante el género y sobreescribimos
+
+SeriesAll2 <- Series %>% filter (numberOfEpisodes  > 6 & averageRating > 0.1  & runtimeMinutes >10 ) %>% select (numberOfEpisodes, Finalization, originalTitle, startYear, endYear, runtimeMinutes, averageRating, 
+                                                                                                                 numVotes, genre,GenderMale, GenderFeMale)
+SeriesAll2 <- SeriesAll2 %>% filter (numberOfEpisodes  < 100 & runtimeMinutes < 80 )
+
+write.csv(SeriesAll2, file= "SeriesModelo2.csv")
 
