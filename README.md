@@ -1,25 +1,25 @@
-# TFM
-
 # Prediction Finalization Series TV
 ### Master Data Science - K SCHOOL
 ### Author: Roberto Marcos Aparicio
 
+[**How wrong are my predictions?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
 
+<kbd><img title="Dashboard" src="https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/tree/master/Data/Images"></kbd><br/>
 
+The dashboard is hosted on AWS and the front-end on Apache Superset. The url and public access is as follows:
+  
+http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5
 
-**View Dashboards**
+``` bash
+user: kschool
+password: kschool
+```
 
-<kbd><img title="Dashboard" src="https://raw.githubusercontent.com/apache/incubator-superset/master/superset/assets/images/screenshots/bank_dash.png"></kbd><br/>
-
-
-
-## Introdución 
+## Introduction
 
 This project aims to predict the number of chapters that a television series will have by estimating through machine learning based on a series of variables (number of votes, ratings, average runtime minutes of chapters, among others) provided by the database from the [IMDB] page (https://datasets.imdbws.com/).
 
 The final tool is aimed at all users who are fans of television series so they can make the decision if they want to see a series based on the number of chapters that will have and therefore, know in what episode will end.
-
-## Tecnología
 
 ## Technology
 
@@ -45,16 +45,4 @@ AWS
 
 
 AWS
-```
-
-### [Dashboad ApacheSuperSet](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
-
-The dashboard is hosted on AWS and the front-end on Apache Superset. 
-The url and public access is as follows:
-  
-  [**How wrong are my predictions?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
-
-``` bash
-user: kschool
-password: kschool
 ```
