@@ -184,3 +184,4 @@ SeriesAll2 <- SeriesAll2 %>% filter (numberOfEpisodes  < 100 & runtimeMinutes < 
 
 write.csv(SeriesAll2, file= "SeriesModelo2.csv")
 
+
