@@ -30,9 +30,6 @@ R 3.5.1
 Apache Superset
 
 Amazon Web Services
-
-
-AWS
 ```
 
 ## Description of dataset fields
@@ -57,7 +54,7 @@ The data can be downloaded in [IMDB](https://datasets.imdbws.com/) and the descr
 
 ### [1. Cleaning Data](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/1.%20CleaningData.R).
 
-* Programming language: R*
+*Programming language: R*
   
   After downloading the data and assigning the path, the series data are filtered since 1990 to obtain a greater volume of data. The objective is to gather in the same dataset the information aggregated by series of the number of chapters, rating, year of beginning, year of end, average runtime minutes of the episodes, number of votes, the gender to which it belongs and the actors, actresses, directors and writers that compose it. No other relevant information is available in this dataset, such as audiences to include it.
 
@@ -71,13 +68,13 @@ Finally, all those series that are of genres not associated with television seri
 
 ### [2.	Data_Visualizations](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/2.%20Data_Visualizations.ipynb)
 
-* Programming language: Python*
+*Programming language: Python*
   
   Observations on each variable and its corresponding correlation (or not as in this case)
 
 ### [3. Data_Modeling](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/3.%20Data_Modeling.ipynb)
 
-* Programming language: Python*
+*Programming language: Python*
   
   In this notebook the 'goldsmith' data.
 
@@ -113,4 +110,4 @@ password: kschool
 
 In the dashboard you can choose in a drop-down the series that you want to know the number of predicted episodes or search for the name directly. We must remember that the dataset is filtered by the initial features and that there are famous series that are not found in it.
 
-In addition, you can check how the predicts with current chapters around 30 are reasonable and that the largest number of the predicted number is lower than the current one due to the negative estimate motivated by the bias of the dataset
+In addition, you can check how the predicts with current chapters around 30 are reasonable and that the largest number of the predicted number is lower than the current one due to the negative estimate motivated by the bias of the dataset.

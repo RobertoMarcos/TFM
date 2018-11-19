@@ -4,7 +4,7 @@
 
 [**How wrong are my predictions?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
 
-<kbd><img title="Dashboard" src="https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/tree/master/Data/Images"></kbd><br/>
+<kbd><img title="Dashboard" src="https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/Data/Images/dashboard_wrongs.png"></kbd><br/>
 
 The dashboard is hosted on AWS and the front-end on Apache Superset. The url and public access is as follows:
   
@@ -41,8 +41,8 @@ R 3.5.1
 
 Apache Superset
 
-AWS
-
-
-AWS
+Amazon Web Services
 ```
+## Information
+
+If you want more information about the process data, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md).
