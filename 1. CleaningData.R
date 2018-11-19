@@ -1,8 +1,9 @@
-##BLOQUE DE CARGA DE LIBRERÍAS
+
+# CLEANING_DATA
 
 if(!require("readr")){
-  install.packages("ggplot2")
-  library("ggplot2")
+  install.packages("readr")
+  library("readr")
 }
 if(!require("ggplot2")){
   install.packages("ggplot2")
@@ -25,15 +26,20 @@ if (!require("reshape2")){
   install.packages("reshape2") 
   library(reshape2)
 }
-#path de archivos
+
+if (!require("stringr")){
+  install.packages("stringr") 
+  library(stringr)
+}
+
+#file path
 
 read_imdb <- function(data_path) {
   path <- "~/Desktop/MASTER DATA SCIENCE/TFM//" #Escoge el path en el que están los archivos
   read_tsv(paste0(path, data_path), na = "\\N", quote='', progress=F)
 }
 
-
-## Filtro por únicamente por Series desde el año 2000 y las features que nos interesan
+## Filter by only by Series since 1990 and the features that interest us
 
 df_ratings <- read_imdb("title.ratings.tsv")
 df_basics <- read_imdb('title.basics.tsv') %>%  select (tconst, titleType, originalTitle, startYear, endYear, runtimeMinutes, genres) %>% 
@@ -41,20 +47,20 @@ df_basics <- read_imdb('title.basics.tsv') %>%  select (tconst, titleType, origi
 
 df_basics <- df_basics %>% left_join(df_ratings)
 
-## Separar en filas los géneros, posteriormente nos quedamos solo con un género para simplificar
+## Separate the genres in rows, later we are left with only one gender to simplify
 
 df_basics_unnest <- df_basics %>% unnest_tokens(genre, genres, token = str_split, pattern= ",")
 
 df_basics_unnest <- df_basics_unnest[!duplicated(df_basics_unnest$tconst), ]
 
-## Extraer el número de capítulos por serie
+## Extract the number of chapters series
 
 df_episode <- read_imdb("title.episode.tsv") %>% filter(!is.na(seasonNumber))
 
 df_episode_count <- df_episode %>% group_by(parentTconst) %>% tally() %>% left_join(df_basics,  c("parentTconst" = "tconst"))
 df_episode_count <- df_episode_count %>%  select (parentTconst, n)
 
-## Extraemos los directores y formateamos para el posterior merge con df_Principals
+## We extract the directors and we format for the later merge with df_Principals
 
 df_directorsWritters <- read_imdb("title.crew.tsv")
 names(df_directorsWritters)[3] <- "writer"
@@ -81,19 +87,18 @@ df_Principals <- df_Principals[ !duplicated(df_Principals) ,]
 
 df_Principals <- rbind.data.frame(df_Principals, df_directorsWritters)
 
-#Cargamos la tabla de nombres de actores
+## We load the table of names of actors
 
 df_actors <- read_imdb("name.basics.tsv") %>% select(nconst, primaryName)
 
 df_Principals <-  df_Principals %>% left_join(df_actors)
 
-
-#Joins de las tablas
+## Joins of the tables
 
 Series <- df_basics_unnest %>% left_join(df_episode_count,  c("tconst" = "parentTconst"))
 Series <- Series %>%  left_join(df_Principals)
 
-# Reorganizamos las categorías por 'ordering' y basamos el reshape en este orden
+## We reorganized the categories by 'ordering' and based the reshape in this order
 
 Series <- Series %>%  
   mutate(ordering = ifelse(category =="actor", 1, ordering)) %>% 
@@ -104,7 +109,7 @@ Series <- Series %>%
 Series <- dcast(Series, tconst+titleType+originalTitle+startYear+endYear+runtimeMinutes+averageRating+numVotes+genre+n~ordering, value.var = "primaryName",
                 fun.aggregate=function(x) paste(x, collapse = ", "))
 
-#Renombramos columnas y separamos la crew en columnas
+## We rename columns and separate the crew into columns
 
 names(Series)[10] <- "numberOfEpisodes"
 names(Series)[11] <- "actors"
@@ -113,23 +118,24 @@ names(Series)[13] <- "director"
 names(Series)[14] <- "writer"
 
 
-# Transformar en NA todas las celdas en blanco
+## Transform all blank cells into NA
+
 is.na(Series) <- Series==''
 
+## New columns counting the number of actors and actresses per series
 
-# Nuevas columnas contando el número de actores y actrices por serie
 library(stringr)
 Series$GenderMale <- str_count(Series$actors, ',')+1
 Series$GenderFeMale <- str_count(Series$actress, ',')+1
 
-#Separamos a los actores por columnas 
+## We separate the actors by columns 
 
 Series <- Series %>%  separate(actors, into= c("actors1", "actors2", "actors3"), sep = ",")
 Series <- Series %>%  separate(actress, into= c("actress1", "actress2", "actress3"), sep = ",")
 Series <- Series %>%  separate(director, into= c("director1"), sep = ",")
 Series <- Series %>%  separate(writer, into= c("writer1"), sep = ",")
 
-# Transformar los NA a 0
+## Transform the NA to 0
 
 Series$numVotes[is.na(Series$numVotes)] <- 0
 Series$startYear[is.na(Series$startYear)] <- 0
@@ -141,16 +147,16 @@ Series$genre[is.na(Series$genre)] <- 0
 Series$GenderMale[is.na(Series$GenderMale)] <- 0
 Series$GenderFeMale[is.na(Series$GenderFeMale)] <- 0
 
-# Añadimos la columna 'Finalization' para separar a la hora del modelo y entrenar solo con los finalizados
+## We add the column 'Finalization' to separate at the time of the model and train only with the finished ones
 
 Series$Finalization <- ifelse(Series$endYear != 0, 1, 0)
 
-#Guardamos en disco la bbdd en bruto
+## We save the raw bbdd on disk
 
 write.csv(Series, file= "Series_2.csv")
 
 
-#Quitamos todas los géneros que no nos interesan al no tratarse de una serie
+## We remove all the genres that do not interest us since it is not a series
 
 table(Series$genre)
 
@@ -162,7 +168,7 @@ Series<-Series[Series$genre!="reality-tv",]
 Series<-Series[Series$genre!="sport",]
 
 
-#Para poder llegar a alguna conclusión vamos a filtar por los siguientes variables en un primer modelo sin crew
+## In order to reach some conclusion we will filter by the following variables in a first model without crew
 
 SeriesAll <- Series %>% filter (numberOfEpisodes  > 6 & averageRating > 0.1  & runtimeMinutes >10 ) %>% select (numberOfEpisodes, Finalization, originalTitle, startYear, endYear, runtimeMinutes, averageRating, 
                                                                                                                 numVotes, genre)
@@ -170,7 +176,7 @@ SeriesAll <- SeriesAll %>% filter (numberOfEpisodes  < 100 & runtimeMinutes < 80
 
 write.csv(SeriesAll, file= "SeriesModelo1.csv")
 
-#Realizamos el mismo filtro pero añadiendo ahora si el crew mediante el género y sobreescribimos
+## We perform the same filter but adding now if the crew through the genre and overwrite
 
 SeriesAll2 <- Series %>% filter (numberOfEpisodes  > 6 & averageRating > 0.1  & runtimeMinutes >10 ) %>% select (numberOfEpisodes, Finalization, originalTitle, startYear, endYear, runtimeMinutes, averageRating, 
                                                                                                                  numVotes, genre,GenderMale, GenderFeMale)
