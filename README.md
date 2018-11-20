@@ -1,4 +1,4 @@
-# Prediction Finalization Series TV
+# Prediction Finalization TV Series
 ### Master Data Science - K SCHOOL
 ### Author: Roberto Marcos Aparicio
 
