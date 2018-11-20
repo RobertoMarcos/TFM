@@ -2,9 +2,9 @@
 ### Master Data Science - K SCHOOL
 ### Author: Roberto Marcos Aparicio
 
-[**How wrong are my predictions?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
+[**HOW WRONG ARE MY PREDICTIONS?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
 
-<kbd><img title="Dashboard" src="https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/Data/Images/dashboard_wrongs.png"></kbd><br/>
+<kbd><img title="Dashboard" src="https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/data/Images/dashboard_wrongs.png"></kbd><br/>
 
 The dashboard is hosted on AWS and the front-end on Apache Superset. The url and public access is as follows:
   
@@ -45,4 +45,4 @@ Amazon Web Services
 ```
 ## Information
 
-If you want more information about the process data, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md).
+If you want more information about the data process, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md).
