@@ -1,11 +1,11 @@
-# Prediction Finalization Series TV
+# Prediction Finalization TV Series
 ### Master Data Science - K SCHOOL
 ### Author: Roberto Marcos Aparicio
 
 
 ## Introduction 
 
-This project aims to predict the number of chapters that a television series will have by estimating through machine learning based on a series of variables (number of votes, ratings, average runtime minutes of chapters, among others) provided by the database from the [IMDB] page (https://datasets.imdbws.com/).
+This project aims to predict the number of chapters that a television series will have by estimating through machine learning based on a series of variables (number of votes, ratings, average runtime minutes of chapters, among others) provided by the database from the [IMDB](https://datasets.imdbws.com/).
 
 The final tool is aimed at all users who are fans of television series so they can make the decision if they want to see a series based on the number of chapters that will have and therefore, know in what episode will end.
 
@@ -37,22 +37,22 @@ Amazon Web Services
 * **numberOfEpisodes**. Number of episodes in the series (from 6 to 100)
 * **Finalization**. 1 if it has ended 0 if not
 * **startYear**. Year of the beginning of the series
-* **endYear**. Year of finished of the series.
-* **runtimeMinutes**. Average duration chapters of the serie.
-* **averageRating**. Average rating of the series according to IMDB users.
-* **numVotes**. Number of votes obtained according to IMB users.
-* **genre**. Gender of the series.
-* **genderMale**. Number of male actors in the series.
-* **genderFemale**. Number of female actresses in the series.
+* **endYear**. Year of finished of the series
+* **runtimeMinutes**. Average duration chapters of the serie
+* **averageRating**. Average rating of the series according to IMDB users
+* **numVotes**. Number of votes obtained according to IMB users
+* **genre**. Gender of the series
+* **genderMale**. Number of male actors in the series
+* **genderFeMale**. Number of female actresses in the series
 
 ## Methodology
 
-### 0. Download data
+### [0. Download data](https://datasets.imdbws.com/)
 
 The data can be downloaded in [IMDB](https://datasets.imdbws.com/) and the description of the fields in the following [documentation](https://www.imdb.com/interfaces/).
 
 
-### [1. Cleaning Data](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/1.%20CleaningData.R).
+### [1. Data Cleaning](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/1.%20Data_Cleaning.R)
 
 *Programming language: R*
   
@@ -62,7 +62,7 @@ In addition, by not having a field to know if the series has ended, it is conclu
 
 After a series of previous visualizations, it is decided due to the bias of the data, increase the minimum number of chapters to 6 to try to minimize the negative bias and a maximum of 100 since there is no more volume from this number.
 
-For its part, the rating for votes to start at 0.1 and the duration of the series is between 10 and 80 minutes since the data are indications that can be feature films (> 80) and short films (<10)
+For its part, the rating for votes to start at 0.1 and the duration of the series is between 10 and 80 minutes since the data are indications that can be feature films (> 80) and short films (<10).
 
 Finally, all those series that are of genres not associated with television series are eliminated, keeping the dataset in two parts for the subsequent treatment in two models.
 
@@ -70,13 +70,13 @@ Finally, all those series that are of genres not associated with television seri
 
 *Programming language: Python*
   
-  Observations on each variable and its corresponding correlation (or not as in this case)
+  Observations on each variable and its corresponding correlation (or not as in this case).
 
 ### [3. Data_Modeling](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/3.%20Data_Modeling.ipynb)
 
 *Programming language: Python*
   
-  In this notebook the 'goldsmith' data.
+In this notebook the 'goldsmith' data.
 
 'Featuring engineering' transforming the numerical variables of the X by sklearn MinMaxScaler so that the range of variables is between 0 and 1 (later genderMale and genderFemale) and dummies for the genre categories of each film.
 
@@ -96,18 +96,20 @@ In all the models, when validating with the set of not finished the metric 'r2' 
 
 The output of the model is indexed in the unfinished episodes dataset and the csv to sql is transformed to use Apache Superset.
 
-### [3. Dashboad ApacheSuperSet](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
+### [3. Dashboad Apache Superset](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
 
 The dashboard is hosted on AWS and the front-end on Apache Superset. 
 The url and public access is as follows:
   
   [**How wrong are my predictions?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
 
-``` bash
+``` 
 user: kschool
 password: kschool
 ```
 
-In the dashboard you can choose in a drop-down the series that you want to know the number of predicted episodes or search for the name directly. We must remember that the dataset is filtered by the initial features and that there are famous series that are not found in it.
+First, click on the dashboard tab and select 'How wrong are my predictions?'. In the dashboard, you can choose in a drop-down the series that you want to know the number of predicted episodes or search for the name directly. We must remember that the dataset is filtered by the initial features and that there are famous series that are not found in it.
 
 In addition, you can check how the predicts with current chapters around 30 are reasonable and that the largest number of the predicted number is lower than the current one due to the negative estimate motivated by the bias of the dataset.
+
+
