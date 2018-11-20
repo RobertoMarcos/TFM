@@ -47,4 +47,4 @@ Amazon Web Services
 ```
 ## Information
 
-If you want more information about the data process, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md). For any other question, please contact me in the following email: rmarcos89@gmail.com.
+If you want more information about the data process, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md). For any other question, please contact me in the following email rmarcos89@gmail.com.
