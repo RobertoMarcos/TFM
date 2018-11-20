@@ -2,6 +2,8 @@
 ### Master Data Science - K SCHOOL
 ### Author: Roberto Marcos Aparicio
 
+## Dashboard
+
 [**HOW WRONG ARE MY PREDICTIONS?**](http://superset-1998162619.eu-west-1.elb.amazonaws.com/r/5)
 
 <kbd><img title="Dashboard" src="https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/data/Images/dashboard_wrongs.png"></kbd><br/>
@@ -45,4 +47,4 @@ Amazon Web Services
 ```
 ## Information
 
-If you want more information about the data process, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md).
+If you want more information about the data process, follow the [next document](https://github.com/RobertoMarcos/TFM-PredictionFinalizationTVSeries/blob/master/project_report.md). For any other question, please contact me in the following email: rmarcos89@gmail.com.
